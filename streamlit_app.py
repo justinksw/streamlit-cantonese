@@ -21,7 +21,7 @@ with st.echo():
     options.add_argument("--headless")
 
     driver = get_driver()
-    driver.get("http://example.com")
+    driver.get("https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
 
     st.code(driver.page_source)
 
