@@ -25,6 +25,8 @@
 
 #     st.code(driver.page_source)
 
+# https://github.com/snehankekre/streamlit-selenium-chrome/tree/main
+
 
 from time import sleep
 
@@ -109,9 +111,9 @@ if text:
     try:
         syllables = get_syllables(text)
 
-        for s in syllables:
+        for i, s in enumerate(syllables):
 
-            st.subheader(s)
+            st.subheader(f"({i+1}) {s}")
 
     except Exception as e:
 
