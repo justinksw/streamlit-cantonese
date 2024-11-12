@@ -40,14 +40,14 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
 
+
 @st.cache_resource
 def get_driver():
     return webdriver.Chrome(
-        service=Service(
-            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-        ),
+        service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
         options=options,
     )
+
 
 options = Options()
 options.add_argument("--disable-gpu")
@@ -108,13 +108,19 @@ st.write("Reference: https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
 text = st.text_input(label="Enter **One** character to search")
 
 if text:
-    try:
-        syllables = get_syllables(text)
+    if len(text) == 1:
 
-        for i, s in enumerate(syllables):
+        try:
+            syllables = get_syllables(text)
 
-            st.subheader(f"({i+1}) {s}")
+            for i, s in enumerate(syllables):
 
-    except Exception as e:
+                st.subheader(f"({i+1}) {s}")
 
-        st.write(e)
+        except Exception as e:
+
+            st.write(e)
+
+    else:
+
+        st.write("You can only enter **one** character.")
