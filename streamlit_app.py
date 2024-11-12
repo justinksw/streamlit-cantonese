@@ -31,6 +31,8 @@ URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
 
 def get_syllables(inp):
 
+    st.write("enter function")
+
     DRIVER.get(URL)
     sleep(1)
 
