@@ -53,10 +53,7 @@ with st.echo():
 
     DRIVER = get_driver()
 
-    URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
-    # URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
-
-    DRIVER.get(URL)
+    DRIVER.get("https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
 
 
 def get_syllables(inp):
