@@ -10,14 +10,14 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
 
+
 @st.cache_resource
 def get_driver():
     return webdriver.Chrome(
-        service=Service(
-            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-        ),
+        service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
         options=options,
     )
+
 
 options = Options()
 options.add_argument("--disable-gpu")
@@ -28,14 +28,15 @@ DRIVER = get_driver()
 URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
 # URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
 
+
 def get_syllables(inp):
 
     DRIVER.get(URL)
     sleep(1)
 
-    frame = DRIVER.find_element(
-        By.XPATH, "//html/frameset/frameset/frameset/frame[1]"
-    )
+    st.write("drive get")
+
+    frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frameset/frame[1]")
 
     DRIVER.switch_to.frame(frame)
 
@@ -43,9 +44,13 @@ def get_syllables(inp):
 
     input.send_keys(f"{inp}")
 
+    st.write("send")
+
     submit = DRIVER.find_element(By.XPATH, "/html/body/form[1]/input[2]")
 
     submit.click()
+
+    st.write("submit")
 
     DRIVER.switch_to.default_content()
 
@@ -71,6 +76,7 @@ def get_syllables(inp):
         syllables.append(syllable)
 
     return syllables
+
 
 st.header("粵語拼音檢索")
 
