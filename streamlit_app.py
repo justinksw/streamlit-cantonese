@@ -10,82 +10,82 @@ with st.echo():
     from webdriver_manager.chrome import ChromeDriverManager
     from webdriver_manager.core.os_manager import ChromeType
 
-    @st.cache_resource
-    def get_driver():
-        return webdriver.Chrome(
-            service=Service(
-                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-            ),
-            options=options,
-        )
+@st.cache_resource
+def get_driver():
+    return webdriver.Chrome(
+        service=Service(
+            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+        ),
+        options=options,
+    )
 
-    options = Options()
-    options.add_argument("--disable-gpu")
-    options.add_argument("--headless")
+options = Options()
+options.add_argument("--disable-gpu")
+options.add_argument("--headless")
 
-    DRIVER = get_driver()
+DRIVER = get_driver()
 
-    URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
-    # URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
+URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
+# URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
 
-    def get_syllables(inp):
+def get_syllables(inp):
 
-        DRIVER.get(URL)
-        sleep(1)
+    DRIVER.get(URL)
+    sleep(1)
 
-        frame = DRIVER.find_element(
-            By.XPATH, "//html/frameset/frameset/frameset/frame[1]"
-        )
+    frame = DRIVER.find_element(
+        By.XPATH, "//html/frameset/frameset/frameset/frame[1]"
+    )
 
-        DRIVER.switch_to.frame(frame)
+    DRIVER.switch_to.frame(frame)
 
-        input = DRIVER.find_element(By.XPATH, "//html/body/form[1]/input[1]")
+    input = DRIVER.find_element(By.XPATH, "//html/body/form[1]/input[1]")
 
-        input.send_keys(f"{inp}")
+    input.send_keys(f"{inp}")
 
-        submit = DRIVER.find_element(By.XPATH, "/html/body/form[1]/input[2]")
+    submit = DRIVER.find_element(By.XPATH, "/html/body/form[1]/input[2]")
 
-        submit.click()
+    submit.click()
 
-        DRIVER.switch_to.default_content()
+    DRIVER.switch_to.default_content()
 
-        table_frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frame")
+    table_frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frame")
 
-        DRIVER.switch_to.frame(table_frame)
+    DRIVER.switch_to.frame(table_frame)
 
-        table = DRIVER.find_element(By.XPATH, "//html/body/form/table[1]")
+    table = DRIVER.find_element(By.XPATH, "//html/body/form/table[1]")
 
-        rows = table.find_elements(By.TAG_NAME, "tr")
+    rows = table.find_elements(By.TAG_NAME, "tr")
 
-        syllables = []
+    syllables = []
 
-        for r in rows[1:]:
+    for r in rows[1:]:
 
-            td1 = r.find_elements(By.TAG_NAME, "td")[0]
+        td1 = r.find_elements(By.TAG_NAME, "td")[0]
 
-            syllable = ""
+        syllable = ""
 
-            for font in td1.find_elements(By.TAG_NAME, "font"):
-                syllable += font.text
+        for font in td1.find_elements(By.TAG_NAME, "font"):
+            syllable += font.text
 
-            syllables.append(syllable)
+        syllables.append(syllable)
 
-        return syllables
+    return syllables
 
-    st.header("粵語拼音檢索")
+st.header("粵語拼音檢索")
 
-    st.write("Reference: https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
+st.write("Reference: https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
 
-    text = st.text_input(label="Enter **One** character to search")
+text = st.text_input(label="Enter **One** character to search")
 
-    if text:
-        try:
-            syllables = get_syllables(text)
+if text:
+    try:
+        syllables = get_syllables(text)
 
-            for s in syllables:
+        for s in syllables:
 
-                st.subheader(s)
+            st.subheader(s)
 
-        except:
+    except:
 
-            st.subheader("No result.")
+        st.subheader("No result.")
