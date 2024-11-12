@@ -88,4 +88,4 @@ if text:
 
     except Exception as e:
 
-        st.subheader(e)
+        st.write(e)
