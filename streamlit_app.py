@@ -86,6 +86,6 @@ if text:
 
             st.subheader(s)
 
-    except:
+    except Exception as e:
 
-        st.subheader("No result.")
+        st.subheader(e)
