@@ -3,20 +3,21 @@ from time import sleep
 import streamlit as st
 
 with st.echo():
+    from selenium.webdriver.common.by import By
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options
     from selenium.webdriver.chrome.service import Service
     from webdriver_manager.chrome import ChromeDriverManager
     from webdriver_manager.core.os_manager import ChromeType
 
-
     @st.cache_resource
     def get_driver():
         return webdriver.Chrome(
-            service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
+            service=Service(
+                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+            ),
             options=options,
         )
-
 
     options = Options()
     options.add_argument("--disable-gpu")
@@ -27,13 +28,14 @@ with st.echo():
     URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
     # URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
 
-
     def get_syllables(inp):
 
         DRIVER.get(URL)
         sleep(1)
 
-        frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frameset/frame[1]")
+        frame = DRIVER.find_element(
+            By.XPATH, "//html/frameset/frameset/frameset/frame[1]"
+        )
 
         DRIVER.switch_to.frame(frame)
 
@@ -69,7 +71,6 @@ with st.echo():
             syllables.append(syllable)
 
         return syllables
-
 
     st.header("粵語拼音檢索")
 
