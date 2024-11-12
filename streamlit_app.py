@@ -30,38 +30,36 @@ from time import sleep
 
 import streamlit as st
 
-with st.echo():
-    from selenium.webdriver.common.by import By
-    from selenium import webdriver
-    from selenium.webdriver.chrome.options import Options
-    from selenium.webdriver.chrome.service import Service
-    from webdriver_manager.chrome import ChromeDriverManager
-    from webdriver_manager.core.os_manager import ChromeType
+# with st.echo():
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 
-    @st.cache_resource
-    def get_driver():
-        return webdriver.Chrome(
-            service=Service(
-                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-            ),
-            options=options,
-        )
+@st.cache_resource
+def get_driver():
+    return webdriver.Chrome(
+        service=Service(
+            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+        ),
+        options=options,
+    )
 
-    options = Options()
-    options.add_argument("--disable-gpu")
-    options.add_argument("--headless")
+options = Options()
+options.add_argument("--disable-gpu")
+options.add_argument("--headless")
 
-    DRIVER = get_driver()
+DRIVER = get_driver()
 
-    # "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
-    # "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
+# "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
+# "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
 
-    DRIVER.get("https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
+DRIVER.get("https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
 
 
 def get_syllables(inp):
-
-    st.write("enter function")
 
     frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frameset/frame[1]")
 
@@ -71,13 +69,9 @@ def get_syllables(inp):
 
     input.send_keys(f"{inp}")
 
-    st.write("send")
-
     submit = DRIVER.find_element(By.XPATH, "/html/body/form[1]/input[2]")
 
     submit.click()
-
-    st.write("submit")
 
     DRIVER.switch_to.default_content()
 
