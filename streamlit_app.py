@@ -1,37 +1,6 @@
-import streamlit as st
-
-with st.echo():
-    from selenium import webdriver
-    from selenium.webdriver.chrome.options import Options
-    from selenium.webdriver.chrome.service import Service
-    from webdriver_manager.chrome import ChromeDriverManager
-    from webdriver_manager.core.os_manager import ChromeType
-
-    @st.cache_resource
-    def get_driver():
-        return webdriver.Chrome(
-            service=Service(
-                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-            ),
-            options=options,
-        )
-
-    options = Options()
-    options.add_argument("--disable-gpu")
-    options.add_argument("--headless")
-
-    driver = get_driver()
-    driver.get("https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
-
-    st.code(driver.page_source)
-
-
-# from time import sleep
-
 # import streamlit as st
 
 # with st.echo():
-#     from selenium.webdriver.common.by import By
 #     from selenium import webdriver
 #     from selenium.webdriver.chrome.options import Options
 #     from selenium.webdriver.chrome.service import Service
@@ -51,74 +20,105 @@ with st.echo():
 #     options.add_argument("--disable-gpu")
 #     options.add_argument("--headless")
 
-#     DRIVER = get_driver()
+#     driver = get_driver()
+#     driver.get("https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
 
-#     # "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
-#     # "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
-
-#     DRIVER.get("https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
+#     st.code(driver.page_source)
 
 
-# def get_syllables(inp):
+from time import sleep
 
-#     st.write("enter function")
+import streamlit as st
 
-#     frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frameset/frame[1]")
+with st.echo():
+    from selenium.webdriver.common.by import By
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.chrome.service import Service
+    from webdriver_manager.chrome import ChromeDriverManager
+    from webdriver_manager.core.os_manager import ChromeType
 
-#     DRIVER.switch_to.frame(frame)
+    @st.cache_resource
+    def get_driver():
+        return webdriver.Chrome(
+            service=Service(
+                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+            ),
+            options=options,
+        )
 
-#     input = DRIVER.find_element(By.XPATH, "//html/body/form[1]/input[1]")
+    options = Options()
+    options.add_argument("--disable-gpu")
+    options.add_argument("--headless")
 
-#     input.send_keys(f"{inp}")
+    DRIVER = get_driver()
 
-#     st.write("send")
+    # "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
+    # "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
 
-#     submit = DRIVER.find_element(By.XPATH, "/html/body/form[1]/input[2]")
-
-#     submit.click()
-
-#     st.write("submit")
-
-#     DRIVER.switch_to.default_content()
-
-#     table_frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frame")
-
-#     DRIVER.switch_to.frame(table_frame)
-
-#     table = DRIVER.find_element(By.XPATH, "//html/body/form/table[1]")
-
-#     rows = table.find_elements(By.TAG_NAME, "tr")
-
-#     syllables = []
-
-#     for r in rows[1:]:
-
-#         td1 = r.find_elements(By.TAG_NAME, "td")[0]
-
-#         syllable = ""
-
-#         for font in td1.find_elements(By.TAG_NAME, "font"):
-#             syllable += font.text
-
-#         syllables.append(syllable)
-
-#     return syllables
+    DRIVER.get("https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
 
 
-# st.header("粵語拼音檢索")
+def get_syllables(inp):
 
-# st.write("Reference: https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
+    st.write("enter function")
 
-# text = st.text_input(label="Enter **One** character to search")
+    frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frameset/frame[1]")
 
-# if text:
-#     try:
-#         syllables = get_syllables(text)
+    DRIVER.switch_to.frame(frame)
 
-#         for s in syllables:
+    input = DRIVER.find_element(By.XPATH, "//html/body/form[1]/input[1]")
 
-#             st.subheader(s)
+    input.send_keys(f"{inp}")
 
-#     except Exception as e:
+    st.write("send")
 
-#         st.write(e)
+    submit = DRIVER.find_element(By.XPATH, "/html/body/form[1]/input[2]")
+
+    submit.click()
+
+    st.write("submit")
+
+    DRIVER.switch_to.default_content()
+
+    table_frame = DRIVER.find_element(By.XPATH, "//html/frameset/frameset/frame")
+
+    DRIVER.switch_to.frame(table_frame)
+
+    table = DRIVER.find_element(By.XPATH, "//html/body/form/table[1]")
+
+    rows = table.find_elements(By.TAG_NAME, "tr")
+
+    syllables = []
+
+    for r in rows[1:]:
+
+        td1 = r.find_elements(By.TAG_NAME, "td")[0]
+
+        syllable = ""
+
+        for font in td1.find_elements(By.TAG_NAME, "font"):
+            syllable += font.text
+
+        syllables.append(syllable)
+
+    return syllables
+
+
+st.header("Cantonese syllables")
+
+st.write("Reference: https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/")
+
+text = st.text_input(label="Enter **One** character to search")
+
+if text:
+    try:
+        syllables = get_syllables(text)
+
+        for s in syllables:
+
+            st.subheader(s)
+
+    except Exception as e:
+
+        st.write(e)
