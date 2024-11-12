@@ -5,12 +5,24 @@ import streamlit as st
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 
 
-chrome_options = Options()
-chrome_options.add_argument("--headless=new")
+@st.cache_resource
+def get_driver():
+    return webdriver.Chrome(
+        service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
+        options=options,
+    )
 
-DRIVER = webdriver.Chrome(options=chrome_options)
+
+options = Options()
+options.add_argument("--disable-gpu")
+options.add_argument("--headless")
+
+DRIVER = get_driver()
 
 URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/"
 # URL = "https://humanum.arts.cuhk.edu.hk/Lexis/lexi-mf/"
